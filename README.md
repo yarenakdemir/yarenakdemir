@@ -1,5 +1,5 @@
 - 👋 Hi, I’m @yarenakdemir
-- 👀 I’m interested in ...
+- 👀 I’m interested in projects about fashion, gaming or cinema. 
 - 🌱 I’m currently learning Java, Python
 - 💞️ I’m looking to collaborate on ...
 - 📫 How to reach me mail:akdemiryaren@gmail.com
