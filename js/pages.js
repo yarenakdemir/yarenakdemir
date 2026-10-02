@@ -1,6 +1,4 @@
-// Shared behaviour for the inner pages
 
-// Phone menu (the + button)
 const menuBtn = document.querySelector('.menu-btn');
 const menu = document.querySelector('.menu-overlay');
 if (menuBtn && menu) {
@@ -11,8 +9,6 @@ if (menuBtn && menu) {
   });
 }
 
-// Video boxes: the play button and the Play / Mute controls work
-// once a <video> is put inside the .media box
 document.querySelectorAll('.media').forEach(box => {
   const video = box.querySelector('video');
   if (!video) return;
@@ -37,14 +33,11 @@ document.querySelectorAll('.media').forEach(box => {
   });
   const fullBtn = box.querySelector('[data-full]');
   if (fullBtn) fullBtn.addEventListener('click', () => {
-    // the whole box goes full screen, so the subtitles and controls stay on top
     if (document.fullscreenElement) document.exitFullscreen();
     else if (box.requestFullscreen) box.requestFullscreen();
-    else if (video.webkitEnterFullscreen) video.webkitEnterFullscreen();   // iPhone
+    else if (video.webkitEnterFullscreen) video.webkitEnterFullscreen();
   });
 
-  // Subtitles: lines are written inside the box as
-  // <script type="application/json" class="cues">[[start, end, "text"], ...]</script>
   const cueData = box.querySelector('script.cues');
   if (cueData) {
     const cues = JSON.parse(cueData.textContent);
@@ -52,7 +45,6 @@ document.querySelectorAll('.media').forEach(box => {
     caption.className = 'caption';
     caption.hidden = true;
     box.appendChild(caption);
-    // the words of a line appear one by one while it is being spoken
     let shown = null;
     const draw = () => {
       const t = video.currentTime;
@@ -68,7 +60,7 @@ document.querySelectorAll('.media').forEach(box => {
           });
         }
         const words = caption.children;
-        const speaking = (cue[1] - cue[0]) * 0.8;      // all words are in by 80% of the line
+        const speaking = (cue[1] - cue[0]) * 0.8;
         const count = Math.ceil(words.length * Math.min(1, (t - cue[0]) / speaking));
         for (let i = 0; i < words.length; i++) words[i].classList.toggle('on', i < Math.max(1, count));
       }
@@ -78,20 +70,17 @@ document.querySelectorAll('.media').forEach(box => {
     video.addEventListener('play', draw);
     video.addEventListener('seeked', draw);
   }
-  // click the bar to jump
   const track = box.querySelector('.track');
   if (track) track.addEventListener('click', e => {
     if (!video.duration) return;
     const r = track.getBoundingClientRect();
     video.currentTime = ((e.clientX - r.left) / r.width) * video.duration;
   });
-  // only one film plays at a time
   video.addEventListener('play', () => {
     document.querySelectorAll('.media video').forEach(v => { if (v !== video) v.pause(); });
   });
 });
 
-// Pictures: click to see big, arrow keys for the next / previous one
 const lightbox = document.querySelector('.lightbox');
 const shots = [...document.querySelectorAll('a.shot')];
 if (lightbox && shots.length) {
@@ -111,28 +100,22 @@ if (lightbox && shots.length) {
     if (e.key === 'ArrowRight') show(current + 1);
     if (e.key === 'ArrowLeft') show(current - 1);
   });
-  // click anywhere but the picture to close
   lightbox.addEventListener('click', e => { if (e.target !== big) lightbox.close(); });
 }
 
-// Underline the section you are looking at in the left menu
 const navLinks = [...document.querySelectorAll('.side-nav a[href^="#"]')];
 const navTargets = navLinks.map(a => document.querySelector(a.getAttribute('href')));
 if (navLinks.length) {
   const header = document.querySelector('.site-header');
-  let clicked = null;   // the name that was just clicked keeps the line until you scroll yourself
+  let clicked = null;
   const setCurrent = index => navLinks.forEach((a, i) => a.classList.toggle('current', i === index));
   const mark = () => {
     if (clicked !== null) return setCurrent(clicked);
-    // the current section is the last one whose title has reached the top
-    // (just under the header)
     const line = (header ? header.offsetHeight : 0) + 40;
     let current = 0;
     navTargets.forEach((target, i) => {
       if (target && target.getBoundingClientRect().top <= line) current = i;
     });
-    // at the very bottom of the page the last section is the current one,
-    // even if it is too short to reach the top
     const page = document.documentElement;
     if (window.innerHeight + window.scrollY >= page.scrollHeight - 2) current = navLinks.length - 1;
     setCurrent(current);
@@ -147,3 +130,19 @@ if (navLinks.length) {
   window.addEventListener('resize', mark);
   mark();
 }
+
+document.querySelectorAll('.media[data-youtube], .media[data-drive]').forEach(box => {
+  box.addEventListener('click', () => {
+    if (box.querySelector('iframe')) return;
+    const frame = document.createElement('iframe');
+    frame.src = box.dataset.drive
+      ? 'https://drive.google.com/file/d/' + box.dataset.drive + '/preview'
+      : 'https://www.youtube-nocookie.com/embed/' + box.dataset.youtube + '?autoplay=1&rel=0';
+    frame.title = box.dataset.label;
+    frame.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+    frame.allowFullscreen = true;
+    frame.referrerPolicy = 'strict-origin-when-cross-origin';
+    box.innerHTML = '';
+    box.appendChild(frame);
+  });
+});

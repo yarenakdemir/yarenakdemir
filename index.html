@@ -70,18 +70,15 @@
   pieces.forEach(piece => {
     piece.addEventListener('click', (e) => {
       e.stopPropagation();
-      // the other pieces fly the opposite way of the clicked one
       const dir = getComputedStyle(piece);
       main.style.setProperty('--out-x', dir.getPropertyValue('--dx'));
       main.style.setProperty('--out-y', dir.getPropertyValue('--dy'));
       piece.classList.add('active');
       main.classList.add('has-active');
-      // when the pieces are gone, open that piece's page
       setTimeout(() => { location.href = piece.dataset.href; }, 450);
     });
   });
 
-  // Coming back with the browser's Back button: put the pieces back
   window.addEventListener('pageshow', () => {
     pieces.forEach(p => p.classList.remove('active'));
     main.classList.remove('has-active');

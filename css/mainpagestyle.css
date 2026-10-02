@@ -11,24 +11,19 @@
     height: 100vh;
     height: 100dvh;
     overflow: hidden;
-    /* the gaps: a deep, slightly lit background instead of flat black */
     background: radial-gradient(ellipse at 40% 35%, #2a2a2a 0%, #0d0d0d 55%, #000 100%);
 }
 
-/* Every picture is the full screen; --shape cuts the piece out of it
-   (the pictures are JPGs with a white background) */
 .pic {
   position: absolute;
   width: 100%;
   height: 100%;
   clip-path: var(--shape);
-  transform-origin: var(--ox) var(--oy);   /* grow from the piece's own centre */
-  pointer-events: none;           /* the image itself ignores the mouse */
+  transform-origin: var(--ox) var(--oy);
+  pointer-events: none;
   transition: transform 0.3s ease, filter 0.3s ease;
 }
 
-/* 3D depth for all pieces at once: light edge top-left, deep shadow
-   bottom-right. One filter on the group is much faster than one per image. */
 .pieces {
   position: absolute;
   inset: 0;
@@ -37,7 +32,6 @@
           drop-shadow(8px 12px 10px rgba(0, 0, 0, 0.85));
 }
 
-/* Each piece is a full-screen layer, so its glow is not cut by the shape */
 .Main_Pics {
   position: absolute;
   inset: 0;
@@ -45,7 +39,6 @@
   transition: filter 0.3s ease;
 }
 
-/* Invisible hit area on top of each image, cut to the image shape */
 .Main_Pics::after {
   content: "";
   position: absolute;
@@ -55,12 +48,10 @@
   pointer-events: auto;
 }
 
-/* While any piece is hovered, turn all pieces black and white */
 .main:has(.Main_Pics:hover) .pic {
   filter: grayscale(1) brightness(0.7);
 }
 
-/* The hovered piece keeps its color, comes forward and glows */
 .main .Main_Pics:hover {
   z-index: 1;
   filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.8))
@@ -72,10 +63,6 @@
 }
 .main.has-active .Main_Pics { filter: none; }
 
-/* ---- Wide screens: the horizontal pictures ----
-   --shape: outline of the piece, as a % of the full picture
-   --ox / --oy: centre of the piece
-   --dx / --dy: the way it flies out (-1 = left/up, 1 = right/down) */
 .FrontEnd      { --shape: polygon(0% 0%, 29.43% 0%, 47.55% 41.5%, 0% 39.44%);
                  --ox: 22%; --oy: 20%; --dx: -1; --dy: -1; --lx: 14%; --ly: 34%; }
 .Photography   { --shape: polygon(31.88% 0%, 63.38% 0%, 60.26% 28.27%, 49.4% 40.76%);
@@ -91,7 +78,6 @@
 .Yaren_Akdemir { --shape: polygon(50.4% 43.03%, 61.13% 30.7%, 71.49% 39.87%, 74.6% 59.99%, 64.2% 71.23%, 53.25% 60.79%);
                  --ox: 62%; --oy: 51%; --dx: 0; --dy: -1; --lx: 62.5%; --ly: 63%; }
 
-/* ---- Upright phones and tablets: the vertical pictures ---- */
 @media (orientation: portrait) {
   .FrontEnd      { --shape: polygon(0% 0%, 60.45% 0%, 47.26% 40.57%, 39.44% 40.57%, 0% 30.52%);
                    --ox: 28%; --oy: 18%; --dx: -1; --dy: -1; --lx: 24%; --ly: 27%; }
@@ -109,26 +95,20 @@
                    --ox: 72%; --oy: 85%; --dx: 1; --dy: 1; --lx: 85%; --ly: 80%; }
 }
 
-/* ---- Click: the chosen piece flies out its own way, the others fly the
-   opposite way, and only the background is left ---- */
 .main.has-active .pic {
   opacity: 0;
-  /* the others go the opposite way of the clicked piece (set in JS) */
   transform: translate(calc(var(--out-x) * -110vw), calc(var(--out-y) * -110vh));
   transition: transform 0.45s ease-in, opacity 0.45s ease-in;
 }
 
-/* The clicked piece goes its own way */
 .main.has-active .Main_Pics.active .pic {
   transform: translate(calc(var(--dx) * 110vw), calc(var(--dy) * 110vh));
 }
 
-/* Nothing left to click: a click anywhere lands on the background */
 .main.has-active .Main_Pics::after {
   pointer-events: none;
 }
 
-/* ---- The name written on each piece (--lx / --ly: where its centre sits) ---- */
 .piece-name {
   position: absolute;
   left: var(--lx);
@@ -142,12 +122,10 @@
   text-transform: uppercase;
   white-space: nowrap;
   color: #fff;
-  /* a dark shadow behind the letters */
   text-shadow: 0 2px 4px #000, 0 0 14px rgba(0, 0, 0, 0.95), 0 0 30px rgba(0, 0, 0, 0.8), 0 0 50px rgba(0, 0, 0, 0.6);
   pointer-events: none;
   transition: opacity 0.2s ease;
 }
-/* the names disappear as the pieces fly away */
 .main.has-active .piece-name { opacity: 0; }
 
 @media (orientation: portrait) {
