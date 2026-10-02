@@ -1,0 +1,5 @@
+.DS_Store
+_kaynak/
+# GitHub'ın 100 MB sınırını aşan videolar (YouTube/Vimeo ile gömülecek)
+filmmaker/videos/
+acting/videos/monologue.mp4

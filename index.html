@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yaren Akdemir</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap">
+    <link rel="stylesheet" href="css/mainpagestyle.css">
+</head>
+<body>
+
+<section class="main">
+<div class="pieces">
+    <section class="FrontEnd Main_Pics" data-href="front%20end/index.html">
+        <picture>
+            <source media="(orientation: portrait)" srcset="images/tall/front-end.jpg">
+            <img class="pic" src="images/wide/front-end.jpg" alt="Front End Developer">
+        </picture>
+        <span class="piece-name">Front-End Developer</span>
+    </section>
+    <section class="Photography Main_Pics" data-href="photography/index.html">
+        <picture>
+            <source media="(orientation: portrait)" srcset="images/tall/photography.jpg">
+            <img class="pic" src="images/wide/photography.jpg" alt="Photography">
+        </picture>
+        <span class="piece-name">Photographer</span>
+    </section>
+    <section class="ArtDirecting Main_Pics" data-href="art%20director/index.html">
+        <picture>
+            <source media="(orientation: portrait)" srcset="images/tall/art-direction.jpg">
+            <img class="pic" src="images/wide/art-direction.jpg" alt="Art Directing">
+        </picture>
+        <span class="piece-name">Art Director</span>
+    </section>
+    <section class="Acting Main_Pics" data-href="acting/index.html">
+        <picture>
+            <source media="(orientation: portrait)" srcset="images/tall/acting.jpg">
+            <img class="pic" src="images/wide/acting.jpg" alt="Acting">
+        </picture>
+        <span class="piece-name">Actor</span>
+    </section>
+    <section class="Drawing Main_Pics" data-href="drawings/index.html">
+        <picture>
+            <source media="(orientation: portrait)" srcset="images/tall/drawing.jpg">
+            <img class="pic" src="images/wide/drawing.jpg" alt="Drawing">
+        </picture>
+        <span class="piece-name">Illustrator</span>
+    </section>
+    <section class="Directing Main_Pics" data-href="filmmaker/index.html">
+        <picture>
+            <source media="(orientation: portrait)" srcset="images/tall/filmmaking.jpg">
+            <img class="pic" src="images/wide/filmmaking.jpg" alt="Directing">
+        </picture>
+        <span class="piece-name">Filmmaker</span>
+    </section>
+    <section class="Yaren_Akdemir Main_Pics" data-href="main%20page/index.html">
+        <picture>
+            <source media="(orientation: portrait)" srcset="images/tall/yaren-akdemir.jpg">
+            <img class="pic" src="images/wide/yaren-akdemir.jpg" alt="Yaren Akdemir">
+        </picture>
+        <span class="piece-name" lang="tr">Yaren Akdemir</span>
+    </section>
+</div>
+</section>
+
+<script>
+  const main = document.querySelector('.main');
+  const pieces = document.querySelectorAll('.Main_Pics');
+
+  pieces.forEach(piece => {
+    piece.addEventListener('click', (e) => {
+      e.stopPropagation();
+      // the other pieces fly the opposite way of the clicked one
+      const dir = getComputedStyle(piece);
+      main.style.setProperty('--out-x', dir.getPropertyValue('--dx'));
+      main.style.setProperty('--out-y', dir.getPropertyValue('--dy'));
+      piece.classList.add('active');
+      main.classList.add('has-active');
+      // when the pieces are gone, open that piece's page
+      setTimeout(() => { location.href = piece.dataset.href; }, 450);
+    });
+  });
+
+  // Coming back with the browser's Back button: put the pieces back
+  window.addEventListener('pageshow', () => {
+    pieces.forEach(p => p.classList.remove('active'));
+    main.classList.remove('has-active');
+  });
+</script>
+</body>
+</html>

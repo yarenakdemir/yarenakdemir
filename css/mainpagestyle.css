@@ -1,0 +1,155 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  list-style-type: none;
+}
+
+.main {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+    /* the gaps: a deep, slightly lit background instead of flat black */
+    background: radial-gradient(ellipse at 40% 35%, #2a2a2a 0%, #0d0d0d 55%, #000 100%);
+}
+
+/* Every picture is the full screen; --shape cuts the piece out of it
+   (the pictures are JPGs with a white background) */
+.pic {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  clip-path: var(--shape);
+  transform-origin: var(--ox) var(--oy);   /* grow from the piece's own centre */
+  pointer-events: none;           /* the image itself ignores the mouse */
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+/* 3D depth for all pieces at once: light edge top-left, deep shadow
+   bottom-right. One filter on the group is much faster than one per image. */
+.pieces {
+  position: absolute;
+  inset: 0;
+  filter: drop-shadow(-2px -2px 1px rgba(255, 255, 255, 0.35))
+          drop-shadow(2px 2px 1px rgba(0, 0, 0, 0.9))
+          drop-shadow(8px 12px 10px rgba(0, 0, 0, 0.85));
+}
+
+/* Each piece is a full-screen layer, so its glow is not cut by the shape */
+.Main_Pics {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  transition: filter 0.3s ease;
+}
+
+/* Invisible hit area on top of each image, cut to the image shape */
+.Main_Pics::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  clip-path: var(--shape);
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+/* While any piece is hovered, turn all pieces black and white */
+.main:has(.Main_Pics:hover) .pic {
+  filter: grayscale(1) brightness(0.7);
+}
+
+/* The hovered piece keeps its color, comes forward and glows */
+.main .Main_Pics:hover {
+  z-index: 1;
+  filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.8))
+          drop-shadow(0 0 30px rgba(255, 255, 255, 0.5));
+}
+.main .Main_Pics:hover .pic {
+  transform: scale(1.04);
+  filter: grayscale(0) brightness(1.1);
+}
+.main.has-active .Main_Pics { filter: none; }
+
+/* ---- Wide screens: the horizontal pictures ----
+   --shape: outline of the piece, as a % of the full picture
+   --ox / --oy: centre of the piece
+   --dx / --dy: the way it flies out (-1 = left/up, 1 = right/down) */
+.FrontEnd      { --shape: polygon(0% 0%, 29.43% 0%, 47.55% 41.5%, 0% 39.44%);
+                 --ox: 22%; --oy: 20%; --dx: -1; --dy: -1; --lx: 14%; --ly: 34%; }
+.Photography   { --shape: polygon(31.88% 0%, 63.38% 0%, 60.26% 28.27%, 49.4% 40.76%);
+                 --ox: 48%; --oy: 18%; --dx: 0; --dy: -1; --lx: 45%; --ly: 12%; }
+.ArtDirecting  { --shape: polygon(62.19% 26.05%, 66.38% 0%, 100% 0%, 100% 22.82%, 72.39% 37.25%, 62.23% 28.43%);
+                 --ox: 82%; --oy: 17%; --dx: 1; --dy: -1; --lx: 74%; --ly: 29%; }
+.Acting        { --shape: polygon(73.31% 39.6%, 100% 26.33%, 100% 59.72%, 76.43% 59.81%);
+                 --ox: 88%; --oy: 47%; --dx: 1; --dy: 0; --lx: 88%; --ly: 56%; }
+.Drawing       { --shape: polygon(45.79% 98.75%, 52.8% 63.92%, 63.97% 74.5%, 75.73% 62.32%, 100% 62.41%, 100% 100%, 45.84% 100%);
+                 --ox: 75%; --oy: 82%; --dx: 1; --dy: 1; --lx: 80%; --ly: 94%; }
+.Directing     { --shape: polygon(0% 42.78%, 48.64% 43.88%, 51.46% 60.64%, 51.5% 62.4%, 42.39% 100%, 0% 100%);
+                 --ox: 24%; --oy: 72%; --dx: -1; --dy: 1; --lx: 20%; --ly: 93%; }
+.Yaren_Akdemir { --shape: polygon(50.4% 43.03%, 61.13% 30.7%, 71.49% 39.87%, 74.6% 59.99%, 64.2% 71.23%, 53.25% 60.79%);
+                 --ox: 62%; --oy: 51%; --dx: 0; --dy: -1; --lx: 62.5%; --ly: 63%; }
+
+/* ---- Upright phones and tablets: the vertical pictures ---- */
+@media (orientation: portrait) {
+  .FrontEnd      { --shape: polygon(0% 0%, 60.45% 0%, 47.26% 40.57%, 39.44% 40.57%, 0% 30.52%);
+                   --ox: 28%; --oy: 18%; --dx: -1; --dy: -1; --lx: 24%; --ly: 27%; }
+  .Directing     { --shape: polygon(49.64% 40.09%, 63.9% 0%, 100% 0%, 100% 33.57%, 59.97% 40.68%, 49.68% 40.54%);
+                   --ox: 76%; --oy: 19%; --dx: 1; --dy: -1; --lx: 80%; --ly: 31%; }
+  .Photography   { --shape: polygon(0% 32.59%, 37.28% 41.53%, 27.09% 53.91%, 37.67% 67.24%, 0% 73.89%);
+                   --ox: 18%; --oy: 54%; --dx: -1; --dy: 0; --lx: 13%; --ly: 52%; }
+  .Drawing       { --shape: polygon(61.44% 41.91%, 100% 35.59%, 100% 72.9%, 62.27% 68.35%, 74.43% 55.68%);
+                   --ox: 81%; --oy: 54%; --dx: 1; --dy: 0; --lx: 85%; --ly: 45%; }
+  .Yaren_Akdemir { --shape: polygon(30.4% 53.25%, 39.61% 41.98%, 58.38% 41.93%, 70.93% 55.8%, 71.01% 56.4%, 59.53% 67.9%, 40.93% 66.95%, 30.63% 54.3%);
+                   --ox: 50%; --oy: 55%; --dx: 0; --dy: -1; --lx: 50%; --ly: 64.5%; }
+  .Acting        { --shape: polygon(0% 75.59%, 39.54% 68.28%, 44.02% 68.5%, 40.19% 100%, 0% 100%);
+                   --ox: 21%; --oy: 85%; --dx: -1; --dy: 1; --lx: 19%; --ly: 96.5%; }
+  .ArtDirecting  { --shape: polygon(44.26% 97.71%, 47.26% 68.94%, 60.43% 69.43%, 100% 74.34%, 100% 100%, 44.35% 100%);
+                   --ox: 72%; --oy: 85%; --dx: 1; --dy: 1; --lx: 85%; --ly: 80%; }
+}
+
+/* ---- Click: the chosen piece flies out its own way, the others fly the
+   opposite way, and only the background is left ---- */
+.main.has-active .pic {
+  opacity: 0;
+  /* the others go the opposite way of the clicked piece (set in JS) */
+  transform: translate(calc(var(--out-x) * -110vw), calc(var(--out-y) * -110vh));
+  transition: transform 0.45s ease-in, opacity 0.45s ease-in;
+}
+
+/* The clicked piece goes its own way */
+.main.has-active .Main_Pics.active .pic {
+  transform: translate(calc(var(--dx) * 110vw), calc(var(--dy) * 110vh));
+}
+
+/* Nothing left to click: a click anywhere lands on the background */
+.main.has-active .Main_Pics::after {
+  pointer-events: none;
+}
+
+/* ---- The name written on each piece (--lx / --ly: where its centre sits) ---- */
+.piece-name {
+  position: absolute;
+  left: var(--lx);
+  top: var(--ly);
+  z-index: 2;
+  transform: translate(-50%, -50%);
+  font-family: "Roboto", sans-serif;
+  font-size: clamp(10px, 1.15vw, 20px);
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: #fff;
+  /* a dark shadow behind the letters */
+  text-shadow: 0 2px 4px #000, 0 0 14px rgba(0, 0, 0, 0.95), 0 0 30px rgba(0, 0, 0, 0.8), 0 0 50px rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+/* the names disappear as the pieces fly away */
+.main.has-active .piece-name { opacity: 0; }
+
+@media (orientation: portrait) {
+  .piece-name { font-size: clamp(9px, 2.6vw, 20px); letter-spacing: 0.1em; }
+}
