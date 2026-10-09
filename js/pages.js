@@ -126,7 +126,12 @@ if (navLinks.length) {
       if (type === 'mousedown' && e.target.closest('.side-nav')) return;
       clicked = null;
     }, { passive: true }));
-  window.addEventListener('scroll', mark, { passive: true });
+  let waiting = false;
+  window.addEventListener('scroll', () => {
+    if (waiting) return;
+    waiting = true;
+    requestAnimationFrame(() => { waiting = false; mark(); });
+  }, { passive: true });
   window.addEventListener('resize', mark);
   mark();
 }

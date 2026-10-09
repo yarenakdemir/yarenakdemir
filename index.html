@@ -4,59 +4,61 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Yaren Akdemir</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap">
     <link rel="stylesheet" href="css/mainpagestyle.css">
 </head>
 <body>
 
 <section class="main">
-<div class="pieces">
-    <section class="FrontEnd Main_Pics" data-href="front%20end/index.html">
+<div class="pieces"> 
+    <section class="FrontEnd Main_Pics" data-href="front%20end/index.html"> <!-- where the card goes to %20 means space -->
         <picture>
-            <source media="(orientation: portrait)" srcset="images/tall/front-end.jpg">
-            <img class="pic" src="images/wide/front-end.jpg" alt="Front End Developer">
+            <source media="(orientation: portrait)" srcset="images/tall/front-end.jpg"><!-- for vertical screen -->
+            <img decoding="async" class="pic" src="images/wide/front-end.jpg" width="1920" height="1080" alt="Front End Developer">
         </picture>
         <span class="piece-name">Front-End Developer</span>
     </section>
     <section class="Photography Main_Pics" data-href="photography/index.html">
         <picture>
             <source media="(orientation: portrait)" srcset="images/tall/photography.jpg">
-            <img class="pic" src="images/wide/photography.jpg" alt="Photography">
+            <img decoding="async" class="pic" src="images/wide/photography.jpg" width="1920" height="1080" alt="Photography">
         </picture>
         <span class="piece-name">Photographer</span>
     </section>
     <section class="ArtDirecting Main_Pics" data-href="art%20director/index.html">
         <picture>
             <source media="(orientation: portrait)" srcset="images/tall/art-direction.jpg">
-            <img class="pic" src="images/wide/art-direction.jpg" alt="Art Directing">
+            <img decoding="async" class="pic" src="images/wide/art-direction.jpg" width="1920" height="1080" alt="Art Directing">
         </picture>
         <span class="piece-name">Art Director</span>
     </section>
     <section class="Acting Main_Pics" data-href="acting/index.html">
         <picture>
             <source media="(orientation: portrait)" srcset="images/tall/acting.jpg">
-            <img class="pic" src="images/wide/acting.jpg" alt="Acting">
+            <img decoding="async" class="pic" src="images/wide/acting.jpg" width="1920" height="1080" alt="Acting">
         </picture>
         <span class="piece-name">Actor</span>
     </section>
     <section class="Drawing Main_Pics" data-href="drawings/index.html">
         <picture>
             <source media="(orientation: portrait)" srcset="images/tall/drawing.jpg">
-            <img class="pic" src="images/wide/drawing.jpg" alt="Drawing">
+            <img decoding="async" class="pic" src="images/wide/drawing.jpg" width="1920" height="1080" alt="Drawing">
         </picture>
         <span class="piece-name">Illustrator</span>
     </section>
     <section class="Directing Main_Pics" data-href="filmmaker/index.html">
         <picture>
             <source media="(orientation: portrait)" srcset="images/tall/filmmaking.jpg">
-            <img class="pic" src="images/wide/filmmaking.jpg" alt="Directing">
+            <img decoding="async" class="pic" src="images/wide/filmmaking.jpg" width="1920" height="1080" alt="Directing">
         </picture>
         <span class="piece-name">Filmmaker</span>
     </section>
     <section class="Yaren_Akdemir Main_Pics" data-href="main%20page/index.html">
         <picture>
             <source media="(orientation: portrait)" srcset="images/tall/yaren-akdemir.jpg">
-            <img class="pic" src="images/wide/yaren-akdemir.jpg" alt="Yaren Akdemir">
+            <img decoding="async" class="pic" src="images/wide/yaren-akdemir.jpg" width="1920" height="1080" alt="Yaren Akdemir">
         </picture>
         <span class="piece-name" lang="tr">Yaren Akdemir</span>
     </section>
@@ -64,14 +66,14 @@
 </section>
 
 <script>
-  const main = document.querySelector('.main');
+  const main = document.querySelector('.main'); /* const add a variable and name it main */
   const pieces = document.querySelectorAll('.Main_Pics');
 
-  pieces.forEach(piece => {
+  pieces.forEach(piece => /* if we click on one piece */{
     piece.addEventListener('click', (e) => {
-      e.stopPropagation();
+      e.stopPropagation(); /* bilgiler e olayına gelir */
       const dir = getComputedStyle(piece);
-      main.style.setProperty('--out-x', dir.getPropertyValue('--dx'));
+      main.style.setProperty('--out-x', dir.getPropertyValue('--dx'));/*  give the pieces value to main */
       main.style.setProperty('--out-y', dir.getPropertyValue('--dy'));
       piece.classList.add('active');
       main.classList.add('has-active');
@@ -80,7 +82,7 @@
   });
 
   window.addEventListener('pageshow', () => {
-    pieces.forEach(p => p.classList.remove('active'));
+    pieces.forEach(pieces => pieces.classList.remove('active'));
     main.classList.remove('has-active');
   });
 </script>
